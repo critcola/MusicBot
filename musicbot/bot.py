@@ -1814,11 +1814,13 @@ class MusicBot(discord.Client):
 
     async def on_message(self, message):
         await self.wait_until_ready()
-        print("Received message (%s)" % message.content)
+        print("\rReceived message (%s)\n" % message.content)
+        self.safe_print("\rReceived message (%s)\n" % message.content)
 
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
-            print("Message does not begin with command prefix (%s)" % self.config.command_prefix)
+            print("\rMessage does not begin with command prefix (%s)\n" % self.config.command_prefix)
+            self.safe_print("Message does not begin with command prefix (%s)" % self.config.command_prefix)
             return
 
         if message.author == self.user:
