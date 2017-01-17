@@ -1814,13 +1814,14 @@ class MusicBot(discord.Client):
 
     async def on_message(self, message):
         await self.wait_until_ready()
+        self.command_prefix_match = '<@' + self.user.id + '> '
         print("\rReceived message (%s)\n" % message.content)
         self.safe_print("\rReceived message (%s)\n" % message.content)
 
         message_content = message.content.strip()
-        if not message_content.startswith(self.config.command_prefix):
-            print("\rMessage does not begin with command prefix (%s)\n" % self.config.command_prefix)
-            self.safe_print("Message does not begin with command prefix (%s)" % self.config.command_prefix)
+        if not message_content.startswith():
+            print("\rMessage does not begin with command prefix (%s)\n" % self.command_prefix_match)
+            self.safe_print("Message does not begin with command prefix (%s)" % self.command_prefix_match)
             return
 
         if message.author == self.user:
@@ -1830,8 +1831,8 @@ class MusicBot(discord.Client):
         if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
             return  # if I want to log this I just move it under the prefix check
 
-        command, *args = message_content.replace(' ', '_', 2).split()
-        command = command[len(self.config.command_prefix):].lower().strip()
+        command, *args = message_content.replace(' ', '_', 1).split()
+        command = command[len(self.command_prefix_match):].lower().strip()
 
         handler = getattr(self, 'cmd_%s' % command, None)
         if not handler:
