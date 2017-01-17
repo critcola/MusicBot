@@ -1814,6 +1814,7 @@ class MusicBot(discord.Client):
 
     async def on_message(self, message):
         await self.wait_until_ready()
+		self.safe_print("Received message (%s)" % message.content)
 
         message_content = message.content.strip()
         if not message_content.startswith(self.config.command_prefix):
@@ -1826,7 +1827,7 @@ class MusicBot(discord.Client):
         if self.config.bound_channels and message.channel.id not in self.config.bound_channels and not message.channel.is_private:
             return  # if I want to log this I just move it under the prefix check
 
-        command, *args = message_content.replace(' ', '_', 1).split()
+        command, *args = message_content.replace(' ', '_', 2).split()
         command = command[len(self.config.command_prefix):].lower().strip()
 
         handler = getattr(self, 'cmd_%s' % command, None)
